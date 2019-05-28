@@ -1,0 +1,43 @@
+<div class="wrapper">
+	<div id="deletePopup">
+		<p>Are You Sure?</p>
+		<p>Do you really want to delete these records? This process cannot be undone.</p>
+		<div class="bottomDeleteBtns">
+			<button class="cancelBtn">Cancel</button>
+			<button id="deleteConfirmBtn">Delete</button>
+		</div>
+	</div>
+</div>
+<script>		
+	$('#deleteConfirmBtn').click(function(e) {
+		e.preventDefault();
+		alert('Only admin has the permission to delete')
+		// var id = e.target.parentElement.parentElement.dataset.play_id;
+		// deletePlaylist(id);
+		$('#popupContainer').remove();
+		// $('.playing-div').remove();
+		// index = playListRef.findIndex(el => el.id == id);
+		// playListRef.splice(1,index);
+		// player = new Player(playListRef[playListRef.length - 1].id,playListRef[playListRef.length - 1].name, playListRef[playListRef.length - 1].image);
+	});
+
+	$('.cancelBtn').click(function(e) {
+		e.preventDefault();
+		$('#popupContainer').remove();
+	});
+
+	function deletePlaylist(id) {
+		$.ajax({
+			method: 'DELETE',
+			url: "api/playlist/" + id,
+			success: function(response) {
+			}
+		})
+		.then(function() {
+			var update = new Update()
+			update.initPage()
+		})
+	}
+
+</script>
+

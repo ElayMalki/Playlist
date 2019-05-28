@@ -1,0 +1,66 @@
+<form id="edit_playlist_form">
+    <div id="playlist_form_content">
+        <div class="form-group">
+          <label for="playlistName">Playlist Name</label>
+          <input type="text" class="form-control" id="playlistName" placeholder="Enter name" required>
+        </div>
+        <div class="form-group">
+          <label for="playlistURL">Playlist URL</label>
+          <input type="text" class="form-control" id="playlistURL" placeholder="Enter URL" required>
+        </div>
+          <input class="editBtns" type="submit" value="Save">
+          <button class="editBtns clear">RESET FIELDS</button>
+          
+    </div>
+    <div id="img"></div>
+</form>
+
+<script>
+  $(document).ready(function() {
+    var id = $('#edit_playlist_form').data('play_id');
+    var name = $('[data-p_id='+id+'] h3').text();
+    var imgUrl = $('[data-p_id='+id+'] img').attr("src");
+    $('#playlistName').val(name);
+    $('#playlistURL').val(imgUrl);
+    createImg(imgUrl);
+  })
+
+  $("#edit_playlist_form").submit(function(e) {
+    e.preventDefault();
+    var id = e.target.dataset.play_id;
+    var name = $('#playlistName').val();
+    var imgUrl = $('#playlistURL').val();
+    var updateData = {"id":id, "name": name, "image": imgUrl};
+    const playlist = new Playlist(updateData);
+    var updateAct = playlist.UpdatePlaylist (updateData);
+    
+    updateAct.then(function() {
+      var update = new Update()
+      update.initPage()
+    })
+      var formPopup = new DynamicPopup()
+      formPopup.closePopup()
+  });
+
+  $(document).on("input", '#playlistURL', function () {
+    $('#img').empty();
+    createImg(this.value);
+    $(".playlist-image").on('error', function(){
+      $(this).attr( "src", "images/image-placeholder.jpg");
+    });
+  });
+
+  $(".clear").click(function(e) {
+    e.preventDefault();
+    $('#playlistName').val("");
+    $('#playlistURL').val("");
+  });
+
+  function createImg(srcImg) {
+    $('<img>', {
+      class: "playlist-image",
+      src: srcImg,
+    }).appendTo('#img');
+  }
+
+</script>

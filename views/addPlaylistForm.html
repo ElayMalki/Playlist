@@ -1,0 +1,67 @@
+<form id="addPlaylistForm">
+	<div class="form-sec">
+	<h4>Add New Playlist</h4>
+	<div class="form-group">
+	  	<label for="playlist-name">Playlist Name</label>
+	    <input type="text" class="form-control" id="playlist-name" placeholder="Enter Playlist">
+	</div>
+	<div class="form-group">
+	  	<label for="playlist-url">Playlist Artwork URL</label>
+	    <input type="text" class="form-control" id="playlist-url" placeholder="Playlist URL">
+	</div>
+	<div class="form-group">
+		<button class="bottom-btns" id="reset">Reset Fields</button>
+		<button class="bottom-btns" id="next">Next</button>
+	</div>
+	</div>
+	<div class="preview">
+		<img src="images/placeholder.png" alt="">
+	</div>
+</form>
+
+<script>
+
+	$('#addPlaylistForm').submit(function(e) {
+		e.preventDefault();
+        toJsonInLocalStorage();
+		var popup = new DynamicPopup('./views/addSongsForm.html');
+		popup.closePopup();
+		popup.build();
+	});
+
+
+	$('#reset').click(function(event) {
+		event.preventDefault();
+		$('#playlist-name').val('');
+		$('#playlist-url').val('');
+	});
+
+	$(document).on('input', '#playlist-url', function() {
+		var preview = $('.preview')
+    	preview.empty();
+    	preview.append(
+        $('<img>', {
+            src: this.value,
+            class: 'previewImg',
+        })
+    )
+    $('.previewImg').on('error', function(event) {
+    		event.preventDefault();
+    		$(this).attr('src', 'images/placeholder.png')
+    	});
+	});
+
+	// ----------------------------------- //
+
+	function toJsonInLocalStorage() {
+	  console.log($('#playlist-name').val())
+	  var temp = [
+	    {
+	      name: $('#playlist-name').val(),
+	      image: $('#playlist-url').val(),
+	      songs: []
+	    }
+	  ];
+	  localStorage.setItem('temp', JSON.stringify(temp));
+	}
+</script>
